@@ -1,6 +1,7 @@
 # MIPS-CPU
 A simplified design of MIPS CPU on Anvyl FPGA board
 
+Xilinx Spartan 6 FPGA
 XC6SLX45/CSG484
 
 ISA:
