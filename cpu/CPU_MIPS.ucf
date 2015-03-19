@@ -1,0 +1,29 @@
+
+# PlanAhead Generated physical constraints 
+NET "clk" CLOCK_DEDICATED_ROUTE = TRUE; 
+NET "clk_click" CLOCK_DEDICATED_ROUTE = FALSE; 
+NET "clk_click" LOC = E6;
+NET "clk" LOC = D11;
+NET "rst" LOC = P8;
+
+# Anvyl: 1 to light
+NET "LED_out[0]" LOC = P15; # DP
+NET "LED_out[1]" LOC = Y21; # CG
+NET "LED_out[2]" LOC = P20;
+NET "LED_out[3]" LOC = AB19;
+NET "LED_out[4]" LOC = N15;
+NET "LED_out[5]" LOC = Y22;
+NET "LED_out[6]" LOC = AA22;	# CB
+NET "LED_out[7]" LOC = AA21;	# CA
+
+# Anvyl:
+# DISP3		DISP2		DISP1
+# AN4 AN5	AN2 AN3	AN0 AN1
+NET "LED_ctrl[1]" LOC = P16;		# AN4
+NET "LED_ctrl[0]" LOC = M17;		# AN5
+NET "LED_ctrl[3]" LOC = N16;		# AN2
+NET "LED_ctrl[2]" LOC = P19;		# AN3
+NET "LED_ctrl[5]" LOC = AA20;	# AN0
+NET "LED_ctrl[4]" LOC = AB21;	# AN1
+
+NET "real_clk" LOC = R7;	# LD9

@@ -19,182 +19,106 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module CPU_MIPS(
-    //output [15 : 0] PC_out,
+    output [15 : 0] PC_out,
     //output [15 : 0] IR_out,
-	 //output [15 : 0] b16_out,
-	 output [7 : 0] LED_out_rev,
-	 output [5 : 0] LED_ctrl_rev,
+	 output [7 : 0] LED_out,
+	 output [5 : 0] LED_ctrl,
 	 input clk,
-    input clk_timer,
-	 input rst
+    input clk_click,
+	 input rst,
+	 output real_clk
 	 //input ans_switch
-	 /*output [2 : 0] state,
-	 output [5 : 0] cur_ins,
-	 output [15 : 0] test,
+	 //output [2 : 0] state,
+	 //output [5 : 0] cur_ins
+	 /*output [15 : 0] test,
 	 output [15 : 0] test1,
 	 output [15 : 0] test2,
 	 output [15 : 0] test3,
 	 output [15 : 0] test4*/
     );
-	
-	reg [19 : 0] timer;
-	reg [7 : 0] LED_out;
-	reg [5 : 0] LED_ctrl;
-	wire [15 : 0] b16_out;
-	wire [15 : 0] state;
-	wire [15 : 0] cur_ins;
-	assign LED_out_rev = ~LED_out;
-	assign LED_ctrl_rev = ~LED_ctrl;
-	
-	// 7-segment
-	always @(posedge clk_timer)
-	begin
-		timer = timer+1;
-		if (timer == 75000)
-		begin
-			timer = 0;
-		end
-		if (timer < 12500)
-		begin
-			LED_ctrl = 6'b011111;
-			case (PC[7 : 4])
-				4'b0000:	LED_out = 8'b00000011;
-				4'b0001:	LED_out = 8'b10011111;
-				4'b0010:	LED_out = 8'b00100101;
-				4'b0011:	LED_out = 8'b00001101;
-				4'b0100:	LED_out = 8'b10011001;
-				4'b0101:	LED_out = 8'b01001001;
-				4'b0110:	LED_out = 8'b01000001;
-				4'b0111:	LED_out = 8'b00011111;
-				4'b1000:	LED_out = 8'b00000001;
-				4'b1001:	LED_out = 8'b00001001;
-				4'b1010:	LED_out = 8'b00010001;
-				4'b1011:	LED_out = 8'b11000001;
-				4'b1100:	LED_out = 8'b01100011;
-				4'b1101:	LED_out = 8'b10000101;
-				4'b1110:	LED_out = 8'b01100001;
-				4'b1111:	LED_out = 8'b01110001;
-			endcase
-		end
-		else if (timer < 25000)
-		begin
-			LED_ctrl = 6'b101111;
-			case (PC[3 : 0])
-				4'b0000:	LED_out = 8'b00000011;
-				4'b0001:	LED_out = 8'b10011111;
-				4'b0010:	LED_out = 8'b00100101;
-				4'b0011:	LED_out = 8'b00001101;
-				4'b0100:	LED_out = 8'b10011001;
-				4'b0101:	LED_out = 8'b01001001;
-				4'b0110:	LED_out = 8'b01000001;
-				4'b0111:	LED_out = 8'b00011111;
-				4'b1000:	LED_out = 8'b00000001;
-				4'b1001:	LED_out = 8'b00001001;
-				4'b1010:	LED_out = 8'b00010001;
-				4'b1011:	LED_out = 8'b11000001;
-				4'b1100:	LED_out = 8'b01100011;
-				4'b1101:	LED_out = 8'b10000101;
-				4'b1110:	LED_out = 8'b01100001;
-				4'b1111:	LED_out = 8'b01110001;
-			endcase
-		end
-		else if (timer < 37500)
-		begin
-			LED_ctrl = 6'b110111;
-			case (b16_out[15 : 12])
-				4'b0000:	LED_out = 8'b00000011;
-				4'b0001:	LED_out = 8'b10011111;
-				4'b0010:	LED_out = 8'b00100101;
-				4'b0011:	LED_out = 8'b00001101;
-				4'b0100:	LED_out = 8'b10011001;
-				4'b0101:	LED_out = 8'b01001001;
-				4'b0110:	LED_out = 8'b01000001;
-				4'b0111:	LED_out = 8'b00011111;
-				4'b1000:	LED_out = 8'b00000001;
-				4'b1001:	LED_out = 8'b00001001;
-				4'b1010:	LED_out = 8'b00010001;
-				4'b1011:	LED_out = 8'b11000001;
-				4'b1100:	LED_out = 8'b01100011;
-				4'b1101:	LED_out = 8'b10000101;
-				4'b1110:	LED_out = 8'b01100001;
-				4'b1111:	LED_out = 8'b01110001;
-			endcase
-		end
-		else if (timer < 50000)
-		begin
-			LED_ctrl = 6'b111011;
-			case (b16_out[11 : 8])
-				4'b0000:	LED_out = 8'b00000011;
-				4'b0001:	LED_out = 8'b10011111;
-				4'b0010:	LED_out = 8'b00100101;
-				4'b0011:	LED_out = 8'b00001101;
-				4'b0100:	LED_out = 8'b10011001;
-				4'b0101:	LED_out = 8'b01001001;
-				4'b0110:	LED_out = 8'b01000001;
-				4'b0111:	LED_out = 8'b00011111;
-				4'b1000:	LED_out = 8'b00000001;
-				4'b1001:	LED_out = 8'b00001001;
-				4'b1010:	LED_out = 8'b00010001;
-				4'b1011:	LED_out = 8'b11000001;
-				4'b1100:	LED_out = 8'b01100011;
-				4'b1101:	LED_out = 8'b10000101;
-				4'b1110:	LED_out = 8'b01100001;
-				4'b1111:	LED_out = 8'b01110001;
-			endcase
-		end
-		else if (timer < 62500)
-		begin
-			LED_ctrl = 6'b111101;
-			case (b16_out[7 : 4])
-				4'b0000:	LED_out = 8'b00000011;
-				4'b0001:	LED_out = 8'b10011111;
-				4'b0010:	LED_out = 8'b00100101;
-				4'b0011:	LED_out = 8'b00001101;
-				4'b0100:	LED_out = 8'b10011001;
-				4'b0101:	LED_out = 8'b01001001;
-				4'b0110:	LED_out = 8'b01000001;
-				4'b0111:	LED_out = 8'b00011111;
-				4'b1000:	LED_out = 8'b00000001;
-				4'b1001:	LED_out = 8'b00001001;
-				4'b1010:	LED_out = 8'b00010001;
-				4'b1011:	LED_out = 8'b11000001;
-				4'b1100:	LED_out = 8'b01100011;
-				4'b1101:	LED_out = 8'b10000101;
-				4'b1110:	LED_out = 8'b01100001;
-				4'b1111:	LED_out = 8'b01110001;
-			endcase
-		end
-		else
-		begin
-			LED_ctrl = 6'b111110;
-			case (b16_out[3 : 0])
-				4'b0000:	LED_out = 8'b00000011;
-				4'b0001:	LED_out = 8'b10011111;
-				4'b0010:	LED_out = 8'b00100101;
-				4'b0011:	LED_out = 8'b00001101;
-				4'b0100:	LED_out = 8'b10011001;
-				4'b0101:	LED_out = 8'b01001001;
-				4'b0110:	LED_out = 8'b01000001;
-				4'b0111:	LED_out = 8'b00011111;
-				4'b1000:	LED_out = 8'b00000001;
-				4'b1001:	LED_out = 8'b00001001;
-				4'b1010:	LED_out = 8'b00010001;
-				4'b1011:	LED_out = 8'b11000001;
-				4'b1100:	LED_out = 8'b01100011;
-				4'b1101:	LED_out = 8'b10000101;
-				4'b1110:	LED_out = 8'b01100001;
-				4'b1111:	LED_out = 8'b01110001;
-			endcase
-		end
-	end
 
-	//assign PC_out = PC;
+	assign PC_out = PC;
 	//assign IR_out = IR;
 	/*assign test = ALUOut;
 	assign test1 = ALUReg;
 	assign test2 = Mux3Out;
 	assign test3 = Cond_Kind;
 	assign test4 = Jump_Kind;*/
+	
+	wire [2 : 0] state;
+	wire [5 : 0] cur_ins;
+	reg [3 : 0] LED_content;
+	
+	reg real_clk;	// eliminate the shaking hands
+	reg [26 : 0] second_timer;
+	
+	always @(posedge clk or negedge rst)
+	begin
+		if (rst == 0)
+		begin
+			second_timer = 0;
+		end
+		else
+		begin
+			second_timer = second_timer+1;
+			if (second_timer >= 10000000)
+			begin
+				second_timer = 0;
+			end
+			if (second_timer < 5000000)
+			begin
+				real_clk = 1'b1;
+			end
+			else
+			begin
+				real_clk = 1'b0;
+			end
+		end
+	end
+	
+	// simulate-use
+//	always @(posedge clk or negedge rst)
+//	begin
+//		if (rst == 0)
+//		begin
+//			second_timer = 0;
+//		end
+//		else
+//		begin
+//			second_timer = second_timer+1;
+//			if (second_timer >= 100)
+//			begin
+//				second_timer = 0;
+//			end
+//			if (second_timer < 50)
+//			begin
+//				real_clk = 1'b1;
+//			end
+//			else
+//			begin
+//				real_clk = 1'b0;
+//			end
+//		end
+//	end
+	
+	/*always @(posedge clk_click or negedge rst)
+	begin
+		if (rst == 0)
+		begin
+			real_clk = 0;
+		end
+		else
+		begin
+			if (real_clk != 1)
+			begin
+				real_clk = 1;
+				#500;
+				real_clk = 0;
+			end
+		end
+	end*/
+	
+	wire [15 : 0] LED_datmem;
 
 	wire Cond;
 	wire Judge;
@@ -238,6 +162,9 @@ module CPU_MIPS(
 	wire Write;
 	wire Load_ALU;
 	
+	Anvyl_DISP
+		Anvyl7Segment(LED_out, LED_ctrl, clk, rst, {PC[7 : 4], PC[3 : 0], LED_datmem});
+	
 	Load_Rst_Module
 		PC_Unit(PC,	Load_PC, Mux3Out, rst),
 		IR_Unit(IR, Load_IR, InsMem, rst),
@@ -255,7 +182,7 @@ module CPU_MIPS(
 		InsMem_Unit(InsMem, PC);
 	
 	Register_Group
-		Reg_Gp_Unit(RegOutA, RegOutB, WT_Reg, Addr_Reg, Send_Reg, Mux4Out, b16_out);
+		Reg_Gp_Unit(RegOutA, RegOutB, WT_Reg, Addr_Reg, Send_Reg, Mux4Out);
 		
 	Immediate_Extend
 		ImmExt_Unit(ImmExt, Extend, IR);
@@ -278,10 +205,10 @@ module CPU_MIPS(
 		Mux4(Mux4Out, ALUReg, LMD, NPC, Sel_Mux4);
 		
 	Data_Memory
-		DatMem_Unit(DatMem, Write, ALUReg, RegB);
+		DatMem_Unit(DatMem, Write, ALUReg, RegB, LED_datmem);
 		
 	Control_Unit
 		Ctrl_Unit(Load_NPC, Load_PC, Load_IR, Load_RegA, Load_RegB, Load_Imm, WT_Reg, Addr_Reg, Extend, Send_Reg, Load_LMD, Cond_Kind, Jump_Kind,
-						Sel_Mux1, Sel_Mux2, Sel_Mux4, Cal_ALU, Write, Load_ALU, clk, IR, rst, state, cur_ins);
+						Sel_Mux1, Sel_Mux2, Sel_Mux4, Cal_ALU, Write, Load_ALU, real_clk, IR, rst, state, cur_ins);
 
 endmodule

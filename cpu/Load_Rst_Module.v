@@ -41,7 +41,7 @@ module Load_Rst_Module(
 		begin
 			data_out <= 0;
 		end
-		else if (load)
+		else //if (load)
 		begin
 			data_out <= data_in;
 		end

@@ -26,35 +26,44 @@ module CPU_Test;
 
 	// Inputs
 	reg clk;
+	reg clk_click;
 	reg rst;
 
 	// Outputs
 	wire [15:0] PC_out;
 	wire [15:0] IR_out;
 	wire [15:0] b16_out;
+	wire [15:0] LED_datmem;
+	wire [7:0] LED_out;
+	wire [5:0] LED_ctrl;
 	wire [2:0] state;
 	wire [5:0] cur_ins;
 	
-	wire [15:0] test;
+	/*wire [15:0] test;
 	wire [15:0] test1;
 	wire [15:0] test2;
 	wire [15:0] test3;
-	wire [15:0] test4;
+	wire [15:0] test4;*/
 
 	// Instantiate the Unit Under Test (UUT)
 	CPU_MIPS uut (
 		.PC_out(PC_out), 
 		.IR_out(IR_out), 
 		.b16_out(b16_out), 
+		.LED_datmem(LED_datmem), 
+		.LED_out(LED_out),
+		.LED_ctrl(LED_ctrl),
 		.clk(clk), 
+		.clk_click(clk_click),
 		.rst(rst), 
+		.real_clk(real_clk),
 		.state(state), 
-		.cur_ins(cur_ins),
-		.test(test),
+		.cur_ins(cur_ins)
+		/*.test(test),
 		.test1(test1),
 		.test2(test2),
 		.test3(test3),
-		.test4(test4)
+		.test4(test4)*/
 	);
 
 	initial begin
@@ -72,9 +81,9 @@ module CPU_Test;
 	
 	always begin
 		clk = 0;
-		#50;
+		#1;
 		clk = 1;
-		#50;
+		#1;
 	end
       
 endmodule

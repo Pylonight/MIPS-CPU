@@ -342,20 +342,6 @@ module Control_Unit(
 						SRL:		Extend = 6;
 					endcase
 					
-					// always load
-					#1 Load_RegA = 1;
-					Load_RegB = 1;
-					Load_Imm = 1;
-				end
-			
-			_Exec:
-				begin
-					Load_RegA = 0;
-					Load_RegB = 0;
-					Load_Imm = 0;
-					
-					next_state = _Mem;
-					
 					// Sel_Mux1
 					case (cur_ins)
 						ADDIU,
@@ -530,7 +516,21 @@ module Control_Unit(
 					endcase
 					
 					// always load
-					#1 Load_ALU = 1;
+					Load_RegA = 1;
+					Load_RegB = 1;
+					Load_Imm = 1;
+				end
+			
+			_Exec:
+				begin
+					Load_RegA = 0;
+					Load_RegB = 0;
+					Load_Imm = 0;
+					
+					next_state = _Mem;
+					
+					// always load
+					Load_ALU = 1;
 				end
 			
 			_Mem:
@@ -567,15 +567,6 @@ module Control_Unit(
 					endcase
 					
 					Load_PC = 1;
-				end
-			
-			_WB:		// B-kind and SW-kind and JR and JRRA ins won`t get there
-				begin
-					Write = 0;
-					Load_LMD = 0;
-					Load_PC = 0;
-					
-					next_state = _IFetch;
 					
 					// Sel_Mux4
 					case (cur_ins)
@@ -637,6 +628,15 @@ module Control_Unit(
 						// IH
 						MTIH:		Addr_Reg = 4'b1101;
 					endcase
+				end
+			
+			_WB:		// B-kind and SW-kind and JR and JRRA ins won`t get there
+				begin
+					Write = 0;
+					Load_LMD = 0;
+					Load_PC = 0;
+					
+					next_state = _IFetch;
 					
 					// WT_Reg
 					case (cur_ins)
@@ -673,7 +673,7 @@ module Control_Unit(
 						SLTUI,
 						INT,
 						JALR,
-						MTIH:		#1 WT_Reg = 1;
+						MTIH:		WT_Reg = 1;
 					endcase
 				end
 				

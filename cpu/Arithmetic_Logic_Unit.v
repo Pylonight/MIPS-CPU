@@ -45,7 +45,7 @@ module Arithmetic_Logic_Unit(
 		(ctrl == 12) ? (data_in_A < data_in_B) :
 		(ctrl == 13) ? ($signed(data_in_B)>>>data_in_A) :
 		(ctrl == 14) ? (data_in_A>>(data_in_B ? data_in_B : 8)) :
-		(ctrl == 14) ? ($signed(data_in_A)>>>(data_in_B ? data_in_B : 8)) :
+		(ctrl == 15) ? ($signed(data_in_A)>>>(data_in_B ? data_in_B : 8)) :
 		(sign_union == 2'b01 ? 0 : (sign_union == 2'b10 ? 1 : ((data_in_A < data_in_B)^sign_union[1])));
 
 endmodule
